@@ -88,11 +88,12 @@ for level = [4],
         fs = length(s)/T0;
         s=s./(max(abs(s)));
         s=s.*0.9999;
-        wavwrite(s, fs, wavname);
-        stim=wav2spectral(s,'specgram',fs./2,100,32);
-        figure(1);clf;imagesc(stim');axis xy;
-        drawnow;
-%         wavplay(s,fs);
+        #wavwrite(s, fs, wavname);
+        audiowrite(wavname, s, fs);
+        #stim=wav2spectral(s,'specgram',fs./2,100,32);
+        #figure(1);clf;imagesc(stim');axis xy;
+        #drawnow;
+%       #  wavplay(s,fs);
         % save parameters with phase in degrees to be compaitble with ststims code
         a = writeTorcInfo([fname '_' str '_' lev(level) '501' '.txt'],rippleList,cond);
     end
