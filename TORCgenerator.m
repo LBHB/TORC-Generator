@@ -4,6 +4,7 @@
 
 %TorcFormat='standard-448';
 TorcFormat='standard-424';
+my_f0 = [250,500]  % should be 1XN list, subset of [125, 250, 500, 1000, 2000]
 
 switch TorcFormat,
    case 'standard-448',
@@ -35,6 +36,7 @@ a1rf = (1.4:-0.2:-1.4);
 f0 = [125, 250, 500, 1000 2000];
 SF = [10000, 20000, 40000, 80000, 160000];
 lev = 'lhvuw';
+level_range = find(ismember(f0, my_f0));
 
 T = round(1000/min(a1rv)); % base period from lowest modulation freq
 velnum = length(a1rv);
@@ -61,7 +63,7 @@ a1ph = [a1ph a1ph-180];
 
 % generate ripples
 nstim = size(a1am,2);
-for level = [4],
+for level = level_range,
     %cond = [T0, f0, BW, SF, CF, df, RO, AF, Mo, wM, Ph]; 
     T0=3;
     if AF==1,
@@ -88,12 +90,12 @@ for level = [4],
         fs = length(s)/T0;
         s=s./(max(abs(s)));
         s=s.*0.9999;
-        #wavwrite(s, fs, wavname);
+        %wavwrite(s, fs, wavname);
         audiowrite(wavname, s, fs);
-        #stim=wav2spectral(s,'specgram',fs./2,100,32);
-        #figure(1);clf;imagesc(stim');axis xy;
-        #drawnow;
-%       #  wavplay(s,fs);
+        %stim=wav2spectral(s,'specgram',fs./2,100,32);
+        %figure(1);clf;imagesc(stim');axis xy;
+        %drawnow;
+        %  wavplay(s,fs);
         % save parameters with phase in degrees to be compaitble with ststims code
         a = writeTorcInfo([fname '_' str '_' lev(level) '501' '.txt'],rippleList,cond);
     end
